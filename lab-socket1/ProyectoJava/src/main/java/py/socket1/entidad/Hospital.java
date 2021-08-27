@@ -9,6 +9,9 @@ public class Hospital {
 	byte estado;
 	Long nroHospital;
 	
+	public Hospital() {
+		
+	}
 
 	public Hospital(Long nroHospital, Long nroCama, byte estado){
 		this.nroCama = nroCama;

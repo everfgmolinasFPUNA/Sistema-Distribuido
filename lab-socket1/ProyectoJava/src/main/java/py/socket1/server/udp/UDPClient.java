@@ -35,9 +35,9 @@ class UDPClient {
 
             System.out.print("Ingrese el número de cédula (debe ser numérico): ");
             String strcedula = inFromUser.readLine();
-            Long cedula = 0L;
+            Long nrohospital = 0L;
             try {
-            	cedula = Long.parseLong(strcedula);
+            	nrohospital = Long.parseLong(strcedula);
             }catch(Exception e1) {
             	
             }
@@ -47,7 +47,7 @@ class UDPClient {
             System.out.print("Ingrese el apellido: ");
             String apellido = inFromUser.readLine();
             
-            HospitalCentral p = new HospitalCentral(cedula, nombre, apellido);
+            HospitalCentral p = new HospitalCentral(nrohospital, nombre);
             
             String datoPaquete = HospitalCentralJSON.objetoString(p); 
             sendData = datoPaquete.getBytes();

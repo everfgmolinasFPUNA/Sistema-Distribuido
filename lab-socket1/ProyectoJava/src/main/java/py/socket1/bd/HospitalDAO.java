@@ -9,18 +9,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import py.socket1.entidad.HospitalCentral;
-public class HospitalCentralDAO {
+import py.socket1.entidad.Hospital;
+public class HospitalDAO {
  
 	/**
 	 * 
 	 * @param condiciones 
 	 * @return
 	 */
-	public List<HospitalCentral> seleccionar() {
-		String query = "SELECT nrohospital, nombre FROM hospitalcentral ";
+	public List<Hospital> seleccionar() {
+		String query = "SELECT nrocama, estado, nrohospital FROM hospital ";
 		
-		List<HospitalCentral> lista = new ArrayList<HospitalCentral>();
+		List<Hospital> lista = new ArrayList<Hospital>();
 		
 		Connection conn = null; 
         try 
@@ -29,9 +29,10 @@ public class HospitalCentralDAO {
         	ResultSet rs = conn.createStatement().executeQuery(query);
 
         	while(rs.next()) {
-        		HospitalCentral p = new HospitalCentral();
-        		p.setNroHospital(rs.getLong(1));
-        		p.setNombreHospital(rs.getString(2));
+        		Hospital p = new Hospital();
+        		p.setNroCama(rs.getLong(1));
+        		p.setEstado(rs.getByte(2));
+        		p.setNroHospital(rs.getLong(3));
         		
         		lista.add(p);
         	}
@@ -50,10 +51,51 @@ public class HospitalCentralDAO {
 
 	}
 	
-	public List<HospitalCentral> seleccionarPorNroHospital(long cedula) {
-		String SQL = "SELECT nrohospital, nombre FROM hospitalcentral WHERE nrohospital = ? ";
+	public List<Hospital> seleccionarPorNroHospital(long nroHospital) {
+		String SQL = "SELECT nrocama, estado, nrohospital FROM hospital WHERE nrohospital = ? ";
 		
-		List<HospitalCentral> lista = new ArrayList<HospitalCentral>();
+		List<Hospital> lista = new ArrayList<Hospital>();
+		
+		Connection conn = null; 
+        try 
+        {
+        	conn = Bd.connect();
+        	PreparedStatement pstmt = conn.prepareStatement(SQL);
+        	pstmt.setLong(1, nroHospital);
+        	
+        	ResultSet rs = pstmt.executeQuery();
+
+        	while(rs.next()) {
+        		Hospital p = new Hospital();
+        		p.setNroCama(rs.getLong(1));
+        		p.setEstado(rs.getByte(2));
+        		p.setNroHospital(rs.getLong(3));
+        		
+        		lista.add(p);
+        	}
+        	
+        } catch (SQLException ex) {
+            System.out.println("Error en la seleccion: " + ex.getMessage());
+        }
+        finally  {
+        	try{
+        		conn.close();
+        	}catch(Exception ef){
+        		System.out.println("No se pudo cerrar la conexion a BD: "+ ef.getMessage());
+        	}
+        }
+		return lista;
+
+	}
+	
+	public List<Hospital> estadoHospitales() {
+		
+		//Listar Hospitales
+		
+		String SQL = "SELECT count(nrocama) FROM hospital WHERE nrohospital = ?";
+		
+		List<Hospital> lista = new ArrayList<Hospital>();
+		List<List<Hospital>> listaTotal = new ArrayList<List<Hospital>>();
 		
 		Connection conn = null; 
         try 
@@ -65,9 +107,10 @@ public class HospitalCentralDAO {
         	ResultSet rs = pstmt.executeQuery();
 
         	while(rs.next()) {
-        		HospitalCentral p = new HospitalCentral();
-        		p.setNroHospital(rs.getLong(1));
-        		p.setNombreHospital(rs.getString(2));
+        		Hospital p = new Hospital();
+        		p.setNroCama(rs.getLong(1));
+        		p.setEstado(rs.getByte(2));
+        		p.setNroHospital(rs.getLong(3));
         		
         		lista.add(p);
         	}
@@ -86,10 +129,10 @@ public class HospitalCentralDAO {
 
 	}
 	
-    public long insertar(HospitalCentral p) throws SQLException {
+    public long insertar(Hospital p) throws SQLException {
 
-        String SQL = "INSERT INTO hospitalcentral(nrohospital, nombre) "
-                + "VALUES(?,?)";
+        String SQL = "INSERT INTO hospital(nrocama, estado, nrohospital) "
+                + "VALUES(?,?,?)";
  
         long id = 0;
         Connection conn = null;
@@ -98,8 +141,9 @@ public class HospitalCentralDAO {
         {
         	conn = Bd.connect();
         	PreparedStatement pstmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setLong(1, p.getNroHospital());
-            pstmt.setString(2, p.getNombreHospital());
+            pstmt.setLong(1, p.getNroCama());
+            pstmt.setByte(2, p.getEstado());
+            pstmt.setLong(3, p.getNroHospital());
             
             int affectedRows = pstmt.executeUpdate();
             // check the affected rows 
@@ -130,9 +174,9 @@ public class HospitalCentralDAO {
     }
 	
 
-    public long actualizar(HospitalCentral p) throws SQLException {
+    public long actualizar(Hospital p) throws SQLException {
 
-        String SQL = "UPDATE hospitalcentral SET nombre = ? WHERE nrohospital = ? ";
+        String SQL = "UPDATE hospital SET estado = ? WHERE nrocama = ? AND nrohospital = ? ";
  
         long id = 0;
         Connection conn = null;
@@ -141,8 +185,9 @@ public class HospitalCentralDAO {
         {
         	conn = Bd.connect();
         	PreparedStatement pstmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, p.getNombreHospital());
-            pstmt.setLong(2, p.getNroHospital());
+            pstmt.setByte(1, p.getEstado());
+            pstmt.setLong(2, p.getNroCama());
+            pstmt.setLong(3, p.getNroHospital());
  
             int affectedRows = pstmt.executeUpdate();
             // check the affected rows 
@@ -169,9 +214,9 @@ public class HospitalCentralDAO {
         return id;
     }
     
-    public long borrar(long nroHospital) throws SQLException {
+    public long borrar(Hospital p) throws SQLException {
 
-        String SQL = "DELETE FROM hospitalcentral WHERE nrohospital = ? ";
+        String SQL = "DELETE FROM hospital WHERE nrohospital = ? AND nrocama = ?";
  
         long id = 0;
         Connection conn = null;
@@ -180,7 +225,8 @@ public class HospitalCentralDAO {
         {
         	conn = Bd.connect();
         	PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setLong(1, nroHospital);
+        	pstmt.setLong(1, p.getNroHospital());
+            pstmt.setLong(2, p.getNroCama());
  
             int affectedRows = pstmt.executeUpdate();
             // check the affected rows 
