@@ -6,6 +6,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
+
 public class HospitalCentralJSON {
 
 
@@ -46,14 +48,30 @@ public class HospitalCentralJSON {
     
     public static String listObjetoString(HospitalCentral p) {	
     	JSONObject obj = new JSONObject();
-        JSONObject jsonObject = (JSONObject) obj;
+        /*JSONObject jsonObject = (JSONObject) obj;
 		JSONArray msg = (JSONArray) jsonObject.get("resumen");
         Iterator<String> iterator = msg.iterator();
         while (iterator.hasNext()) {
         	p.resumen.add(iterator.next());
-        }       
+        }       */
+        obj.put("resumen", p.getResumen());
 
         return obj.toJSONString();
+    }
+    
+    public static HospitalCentral objetoStringList(String str) throws ParseException {	
+    	HospitalCentral p = new HospitalCentral();
+        JSONParser parser = new JSONParser();
+
+        Object obj = parser.parse(str.trim());
+        JSONObject jsonObject = (JSONObject) obj;
+        
+        JSONArray msg = (JSONArray) jsonObject.get("resumen");
+        Iterator<String> iterator = msg.iterator();
+        while (iterator.hasNext()) {
+        	p.getResumen().add(iterator.next());
+        }
+        return p;
     }
 
 }

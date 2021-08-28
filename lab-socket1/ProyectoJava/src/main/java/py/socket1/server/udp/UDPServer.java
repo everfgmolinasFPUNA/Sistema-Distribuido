@@ -35,13 +35,13 @@ public class UDPServer {
             //2) buffer de datos a enviar y recibir
             byte[] receiveData = new byte[1024];
             byte[] sendData = new byte[1024];
-            Log historial = new Log();
+            
             Log p = new Log();
             List <Log> historialTotal = new ArrayList<Log>();
 			
             //3) Servidor siempre esperando
             while (true) {
-
+            	Log historial = new Log();
                 receiveData = new byte[1024];
 
                 DatagramPacket receivePacket =
@@ -130,6 +130,7 @@ public class UDPServer {
 		                    historial.setIPAddress(IPAddress);
 		                    historial.setPort(port);
 		                    historialTotal.add(historial);
+		                    System.out.println(historialTotal);
 		                    
 		                }catch(Exception e) {
 		                	System.out.println("Cama NO actualizado en la Base de datos, razón: " + e.getLocalizedMessage());
@@ -152,6 +153,7 @@ public class UDPServer {
 		                    historial.setIPAddress(IPAddress);
 		                    historial.setPort(port);
 		                    historialTotal.add(historial);
+		                    System.out.println(historialTotal);
 		                    
 		                }catch(Exception e) {
 		                	System.out.println("Cama NO creada en la Base de datos, razón: " + e.getLocalizedMessage());
@@ -164,9 +166,10 @@ public class UDPServer {
 		                	listaResumen = daoHospitalCentral.estadoHospitales();
 		                	System.out.println("Consultas realizadas");
 		                	h.setResumen(listaResumen);
-		                	System.out.println(listaResumen);
+		                	System.out.println(HospitalCentralJSON.listObjetoString(h));
 		                	sendData = HospitalCentralJSON.listObjetoString(h).getBytes();;
 		                    DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress,port);
+		                    
 		                    serverSocket.send(sendPacket);
 		                    
 		                    
@@ -230,6 +233,7 @@ public class UDPServer {
 		                    historial.setPort(port);
 		                    historialTotal.add(historial);
 		                    String hist = LogJSON.ListLogs(historialTotal);
+		                    System.out.println(historialTotal);
 		                	System.out.println("Historial recibido");
 		                	
 		                	sendData = hist.getBytes();

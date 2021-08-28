@@ -44,7 +44,7 @@ public class LogJSON {
         	list.add(temp);
         }
        // if(list.size() > 0) {
-        	obj.put("asignaturas", list);
+        	obj.put("Acción", list);
         //}
         
 
