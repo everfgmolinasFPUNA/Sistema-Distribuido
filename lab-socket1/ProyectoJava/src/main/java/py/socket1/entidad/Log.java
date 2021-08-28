@@ -3,7 +3,7 @@ package py.socket1.entidad;
 import java.net.InetAddress;
 
 public class Log {
-	int acción;
+	Long acción;
 	String nombreAcción;
 	InetAddress IPAddress;
 	int port;
@@ -13,7 +13,7 @@ public class Log {
 		
 	}
 	
-	public Log(int acción, String nombreAcción, InetAddress IPAddress, int port, String datos) {
+	public Log(Long acción, String nombreAcción, InetAddress IPAddress, int port, String datos) {
 		this.acción = acción;
 		this.nombreAcción = nombreAcción;
 		this.IPAddress = IPAddress;
@@ -21,11 +21,11 @@ public class Log {
 		this.datos = datos;
 	}
 
-	public int getAcción() {
+	public Long getAcción() {
 		return acción;
 	}
 
-	public void setAcción(int acción) {
+	public void setAcción(Long acción) {
 		this.acción = acción;
 	}
 

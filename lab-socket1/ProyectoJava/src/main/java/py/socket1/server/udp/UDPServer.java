@@ -36,6 +36,7 @@ public class UDPServer {
             byte[] receiveData = new byte[1024];
             byte[] sendData = new byte[1024];
             Log historial = new Log();
+            Log p = new Log();
             List <Log> historialTotal = new ArrayList<Log>();
 			
             //3) Servidor siempre esperando
@@ -59,7 +60,7 @@ public class UDPServer {
                 String datoRecibido = new String(receivePacket.getData());
                 datoRecibido = datoRecibido.trim();
                 System.out.println("DatoRecibido: " + datoRecibido );
-                Log p = LogJSON.stringObjeto(datoRecibido);
+                p = LogJSON.stringObjeto(datoRecibido);
 
                 InetAddress IPAddress = receivePacket.getAddress();
 
@@ -68,12 +69,13 @@ public class UDPServer {
                 System.out.println("De : " + IPAddress + ":" + port);
                 System.out.println("Dato Recibida : " + p.getAcci髇() + ", " + p.getDatos() );
                 
-                int acci髇 = p.getAcci髇();
+                long acci髇 = p.getAcci髇();
                 
-                switch (acci髇) {
-                	case 1:
+                
+                	if(acci髇 ==1L)
 		                try {
 		                	HospitalCentral h = HospitalCentralJSON.stringObjeto(p.getDatos()) ;
+		                	System.out.println(p.getDatos());
 		                	daoHospitalCentral.insertar(h);
 		                	System.out.println("Hospital creado");
 		                	
@@ -91,7 +93,7 @@ public class UDPServer {
 		                	System.out.println("Hospital NO insertada en la Base de datos, raz贸n: " + e.getLocalizedMessage());
 		                }
 		                
-                	case 2:
+                	else if(acci髇 ==2L)
                 		try {
 		                	HospitalCentral h = HospitalCentralJSON.stringObjeto(p.getDatos()) ;
 		                	daoHospitalCentral.actualizar(h);
@@ -111,7 +113,7 @@ public class UDPServer {
 		                	System.out.println("Hospital NO actualizado en la Base de datos, raz贸n: " + e.getLocalizedMessage());
 		                }
                 		
-                	case 3:
+                	else if(acci髇 ==3L)
                 		try {
 		                	Hospital h = HospitalJSON.stringObjeto(p.getDatos()) ;
 		                	h.setEstado(3L);
@@ -133,7 +135,7 @@ public class UDPServer {
 		                	System.out.println("Cama NO actualizado en la Base de datos, raz贸n: " + e.getLocalizedMessage());
 		                }
                 		
-                	case 4:
+                	else if(acci髇 ==4L)
                 		try {
 		                	Hospital h = HospitalJSON.stringObjeto(p.getDatos()) ;
 		                	h.setEstado(1l);
@@ -155,14 +157,15 @@ public class UDPServer {
 		                	System.out.println("Cama NO creada en la Base de datos, raz贸n: " + e.getLocalizedMessage());
 		                }
                 		
-                	case 5:
+                	else if(acci髇 ==5L)
                 		try {
 		                	HospitalCentral h = new HospitalCentral();//HospitalCentralJSON.stringObjeto(p.getDatos()) ;
 		                	List<String> listaResumen = new ArrayList<String>();
 		                	listaResumen = daoHospitalCentral.estadoHospitales();
 		                	System.out.println("Consultas realizadas");
 		                	h.setResumen(listaResumen);
-		                	sendData = HospitalCentralJSON.objetoString(h).getBytes();;
+		                	System.out.println(listaResumen);
+		                	sendData = HospitalCentralJSON.listObjetoString(h).getBytes();;
 		                    DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress,port);
 		                    serverSocket.send(sendPacket);
 		                    
@@ -177,7 +180,7 @@ public class UDPServer {
 		                	System.out.println("consultas no realizadas " + e.getLocalizedMessage());
 		                }
                 		
-                	case 6:
+                	else if(acci髇 ==6L)
                 		try {
 		                	Hospital h = HospitalJSON.stringObjeto(p.getDatos()) ;
 		                	h.setEstado(1L);
@@ -199,7 +202,7 @@ public class UDPServer {
 		                	System.out.println("Cama NO desocupada en la Base de datos, raz贸n: " + e.getLocalizedMessage());
 		                }
                 		
-                	case 7:
+                	else if(acci髇 ==7L)
                 		try {
 		                	Hospital h = HospitalJSON.stringObjeto(p.getDatos()) ;
 		                	h.setEstado(2L);
@@ -219,7 +222,7 @@ public class UDPServer {
 		                	System.out.println("Cama NO ocupada en la Base de datos, raz贸n: " + e.getLocalizedMessage());
 		                }
                 		
-                	case 8:
+                	else if(acci髇 ==8L)
                 		try {
                 			historial.setAcci髇(acci髇);
 		                    historial.setDatos(datoRecibido);
@@ -238,7 +241,6 @@ public class UDPServer {
 		                	System.out.println("Historial no recibido " + e.getLocalizedMessage());
 		                }
 	                
-                }
                 // Enviamos la respuesta inmediatamente a ese mismo cliente
                 // Es no bloqueante
                 

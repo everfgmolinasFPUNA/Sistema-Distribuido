@@ -35,13 +35,25 @@ public class HospitalCentralJSON {
         p.setNroHospital(nroHospital);
         p.setNombreHospital((String)jsonObject.get("nombre"));
         
-        JSONArray msg = (JSONArray) jsonObject.get("resumen");
+        /*JSONArray msg = (JSONArray) jsonObject.get("resumen");
         Iterator<String> iterator = msg.iterator();
         while (iterator.hasNext()) {
         	p.resumen.add(iterator.next());
-        }
+        }*/
         
         return p;
 	}
+    
+    public static String listObjetoString(HospitalCentral p) {	
+    	JSONObject obj = new JSONObject();
+        JSONObject jsonObject = (JSONObject) obj;
+		JSONArray msg = (JSONArray) jsonObject.get("resumen");
+        Iterator<String> iterator = msg.iterator();
+        while (iterator.hasNext()) {
+        	p.resumen.add(iterator.next());
+        }       
+
+        return obj.toJSONString();
+    }
 
 }

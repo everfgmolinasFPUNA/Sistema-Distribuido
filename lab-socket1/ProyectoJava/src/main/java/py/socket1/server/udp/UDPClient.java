@@ -4,8 +4,12 @@ package py.socket1.server.udp;
 import java.io.*;
 import java.net.*;
 
+import py.socket1.entidad.Hospital;
+import py.socket1.entidad.HospitalJSON;
 import py.socket1.entidad.HospitalCentral;
 import py.socket1.entidad.HospitalCentralJSON;
+import py.socket1.entidad.Log;
+import py.socket1.entidad.LogJSON;
 
 class UDPClient {
 
@@ -33,61 +37,436 @@ class UDPClient {
             byte[] sendData = new byte[1024];
             byte[] receiveData = new byte[1024];
 
-            System.out.print("Ingrese el nÃºmero de cÃ©dula (debe ser numÃ©rico): ");
-            String strcedula = inFromUser.readLine();
-            Long nrohospital = 0L;
+            System.out.print("Ingrese la acción a realizar (debe ser numÃ©rico): ");
+            String accionstr = inFromUser.readLine();
+            Long accion = 0L;
             try {
-            	nrohospital = Long.parseLong(strcedula);
+            	accion = Long.parseLong(accionstr);
             }catch(Exception e1) {
             	
             }
+            String nroHospitalstr;
+            String nroCamastr;
+            Long nroHospital = 0L;
+            Long nroCama = 0L;
+            String nombre;
+            HospitalCentral p;
+            Hospital h;
+            Log AccionDato;
+            String datoPaquete ;
+            DatagramPacket sendPacket;
             
-            System.out.print("Ingrese el nombre: ");
-            String nombre = inFromUser.readLine();
-            System.out.print("Ingrese el apellido: ");
-            String apellido = inFromUser.readLine();
             
-            HospitalCentral p = new HospitalCentral(nrohospital, nombre);
+            if(accion ==1L) {
+            		System.out.print("Ingrese el numero de hospital (debe ser numerico): ");
+                    nroHospitalstr = inFromUser.readLine();
+                    nroHospital = 0L;
+                    try {
+                    	nroHospital = Long.parseLong(nroHospitalstr);
+                    }catch(Exception e1) {
+                    	
+                    }
+                    System.out.print("Ingrese el nombre: ");
+                    nombre = inFromUser.readLine();
+                    
+                    p = new HospitalCentral(nroHospital, nombre);
+                    AccionDato = new Log();
+                    AccionDato.setAcción(accion);
+                    AccionDato.setPort(puertoServidor);
+                    //AccionDato.setIPAddress(IPAddress);
+                    AccionDato.setDatos(HospitalCentralJSON.objetoString(p));
+                    System.out.println(AccionDato);
+                    datoPaquete = LogJSON.objetoString(AccionDato); 
+                    sendData = datoPaquete.getBytes();
+
+                    System.out.println("Enviar " + datoPaquete + " al servidor. ("+ sendData.length + " bytes)");
+                    sendPacket =
+                            new DatagramPacket(sendData, sendData.length, IPAddress, puertoServidor);
+
+                    clientSocket.send(sendPacket);
+                    
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    System.out.println("Esperamos si viene la respuesta.");
+
+                    //Vamos a hacer una llamada BLOQUEANTE entonces establecemos un timeout maximo de espera
+                    clientSocket.setSoTimeout(10000);
+
+                    try {
+                        // ESPERAMOS LA RESPUESTA, BLOQUENTE
+                        clientSocket.receive(receivePacket);
+
+                        String respuesta = new String(receivePacket.getData());
+                        HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
+                        
+                        InetAddress returnIPAddress = receivePacket.getAddress();
+                        int port = receivePacket.getPort();
+
+                        System.out.println("Respuesta desde =  " + returnIPAddress + ":" + port);
+                       
+                        
+
+                    } catch (SocketTimeoutException ste) {
+
+                        System.out.println("TimeOut: El paquete udp se asume perdido.");
+                    }
+
+            }else if(accion ==2L) {
+            		System.out.print("Ingrese el numero de hospital (debe ser numerico): ");
+                    nroHospitalstr = inFromUser.readLine();
+                    nroHospital = 0L;
+                    try {
+                    	nroHospital = Long.parseLong(nroHospitalstr);
+                    }catch(Exception e1) {
+                    	
+                    }
+                    System.out.print("Ingrese el nombre: ");
+                    nombre = inFromUser.readLine();
+                    
+                    p = new HospitalCentral(nroHospital, nombre);
+                    AccionDato = new Log();
+                    AccionDato.setAcción(accion);
+                    AccionDato.setDatos(HospitalCentralJSON.objetoString(p));
+                    datoPaquete = LogJSON.objetoString(AccionDato); 
+                    sendData = datoPaquete.getBytes();
+
+                    System.out.println("Enviar " + datoPaquete + " al servidor. ("+ sendData.length + " bytes)");
+                    sendPacket =
+                            new DatagramPacket(sendData, sendData.length, IPAddress, puertoServidor);
+
+                    clientSocket.send(sendPacket);
+                    
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    System.out.println("Esperamos si viene la respuesta.");
+
+                    //Vamos a hacer una llamada BLOQUEANTE entonces establecemos un timeout maximo de espera
+                    clientSocket.setSoTimeout(10000);
+
+                    try {
+                        // ESPERAMOS LA RESPUESTA, BLOQUENTE
+                        clientSocket.receive(receivePacket);
+
+                        String respuesta = new String(receivePacket.getData());
+                        HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
+                        
+                        InetAddress returnIPAddress = receivePacket.getAddress();
+                        int port = receivePacket.getPort();
+
+                        System.out.println("Respuesta desde =  " + returnIPAddress + ":" + port);
+                       
+                        
+
+                    } catch (SocketTimeoutException ste) {
+
+                        System.out.println("TimeOut: El paquete udp se asume perdido.");
+                    }
+                    
+            }else if(accion ==3L) {
+            		System.out.print("Ingrese el numero de hospital (debe ser numerico): ");
+                    nroHospitalstr = inFromUser.readLine();
+                    nroHospital = 0L;
+                    try {
+                    	nroHospital = Long.parseLong(nroHospitalstr);
+                    }catch(Exception e1) {
+                    	
+                    }
+                    System.out.print("Ingrese el numero de cama (debe ser numerico): ");
+                    nroCamastr = inFromUser.readLine();
+                    nroCama = 0L;
+                    try {
+                    	nroCama = Long.parseLong(nroCamastr);
+                    }catch(Exception e1) {
+                    	
+                    }
+                    
+                    h = new Hospital(nroHospital, nroCama, 3L);
+                    AccionDato = new Log();
+                    AccionDato.setAcción(accion);
+                    AccionDato.setDatos(HospitalJSON.objetoString(h));
+                    datoPaquete = LogJSON.objetoString(AccionDato); 
+                    sendData = datoPaquete.getBytes();
+
+                    System.out.println("Enviar " + datoPaquete + " al servidor. ("+ sendData.length + " bytes)");
+                    sendPacket =
+                            new DatagramPacket(sendData, sendData.length, IPAddress, puertoServidor);
+
+                    clientSocket.send(sendPacket);
+                    
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    System.out.println("Esperamos si viene la respuesta.");
+
+                    //Vamos a hacer una llamada BLOQUEANTE entonces establecemos un timeout maximo de espera
+                    clientSocket.setSoTimeout(10000);
+
+                    try {
+                        // ESPERAMOS LA RESPUESTA, BLOQUENTE
+                        clientSocket.receive(receivePacket);
+
+                        String respuesta = new String(receivePacket.getData());
+                        HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
+                        
+                        InetAddress returnIPAddress = receivePacket.getAddress();
+                        int port = receivePacket.getPort();
+
+                        System.out.println("Respuesta desde =  " + returnIPAddress + ":" + port);
+                       
+                        
+
+                    } catch (SocketTimeoutException ste) {
+
+                        System.out.println("TimeOut: El paquete udp se asume perdido.");
+                    }
             
-            String datoPaquete = HospitalCentralJSON.objetoString(p); 
-            sendData = datoPaquete.getBytes();
+            }else if(accion ==4L) {
+            		System.out.print("Ingrese el numero de hospital (debe ser numerico): ");
+                    nroHospitalstr = inFromUser.readLine();
+                    nroHospital = 0L;
+                    try {
+                    	nroHospital = Long.parseLong(nroHospitalstr);
+                    }catch(Exception e1) {
+                    	
+                    }
+                    System.out.print("Ingrese el numero de cama (debe ser numerico): ");
+                    nroCamastr = inFromUser.readLine();
+                    nroCama = 0L;
+                    try {
+                    	nroCama = Long.parseLong(nroCamastr);
+                    }catch(Exception e1) {
+                    	
+                    }
+                    
+                    h = new Hospital(nroHospital, nroCama, 1L);
+                    AccionDato = new Log();
+                    AccionDato.setAcción(accion);
+                    AccionDato.setDatos(HospitalJSON.objetoString(h));
+                    datoPaquete = LogJSON.objetoString(AccionDato); 
+                    sendData = datoPaquete.getBytes();
 
-            System.out.println("Enviar " + datoPaquete + " al servidor. ("+ sendData.length + " bytes)");
-            DatagramPacket sendPacket =
-                    new DatagramPacket(sendData, sendData.length, IPAddress, puertoServidor);
+                    System.out.println("Enviar " + datoPaquete + " al servidor. ("+ sendData.length + " bytes)");
+                    sendPacket =
+                            new DatagramPacket(sendData, sendData.length, IPAddress, puertoServidor);
 
-            clientSocket.send(sendPacket);
+                    clientSocket.send(sendPacket);
+                    
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    System.out.println("Esperamos si viene la respuesta.");
 
-            DatagramPacket receivePacket =
-                    new DatagramPacket(receiveData, receiveData.length);
+                    //Vamos a hacer una llamada BLOQUEANTE entonces establecemos un timeout maximo de espera
+                    clientSocket.setSoTimeout(10000);
 
-            System.out.println("Esperamos si viene la respuesta.");
+                    try {
+                        // ESPERAMOS LA RESPUESTA, BLOQUENTE
+                        clientSocket.receive(receivePacket);
 
-            //Vamos a hacer una llamada BLOQUEANTE entonces establecemos un timeout maximo de espera
-            clientSocket.setSoTimeout(10000);
+                        String respuesta = new String(receivePacket.getData());
+                        HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
+                        
+                        InetAddress returnIPAddress = receivePacket.getAddress();
+                        int port = receivePacket.getPort();
 
-            try {
-                // ESPERAMOS LA RESPUESTA, BLOQUENTE
-                clientSocket.receive(receivePacket);
+                        System.out.println("Respuesta desde =  " + returnIPAddress + ":" + port);
+                       
+                        
 
-                String respuesta = new String(receivePacket.getData());
-                HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
-                
-                InetAddress returnIPAddress = receivePacket.getAddress();
-                int port = receivePacket.getPort();
+                    } catch (SocketTimeoutException ste) {
 
-                System.out.println("Respuesta desde =  " + returnIPAddress + ":" + port);
-                System.out.println("Asignaturas: ");
-                
-                for(String tmp: presp.getAsignaturas()) {
-                	System.out.println(" -> " +tmp);
-                }
-                
+                        System.out.println("TimeOut: El paquete udp se asume perdido.");
+                    }
+                    
+            }else if(accion ==5L) {
+                    AccionDato = new Log();
+                    AccionDato.setAcción(5L);
+                    AccionDato.setDatos("Consulta de estados");
+                    datoPaquete = LogJSON.objetoString(AccionDato); 
+                    sendData = datoPaquete.getBytes();
 
-            } catch (SocketTimeoutException ste) {
+                    System.out.println("Enviar " + datoPaquete + " al servidor. ("+ sendData.length + " bytes)");
+                    sendPacket =
+                            new DatagramPacket(sendData, sendData.length, IPAddress, puertoServidor);
 
-                System.out.println("TimeOut: El paquete udp se asume perdido.");
+                    clientSocket.send(sendPacket);
+                    
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    System.out.println("Esperamos si viene la respuesta.");
+
+                    //Vamos a hacer una llamada BLOQUEANTE entonces establecemos un timeout maximo de espera
+                    clientSocket.setSoTimeout(10000);
+
+                    try {
+                        // ESPERAMOS LA RESPUESTA, BLOQUENTE
+                        clientSocket.receive(receivePacket);
+
+                        String respuesta = new String(receivePacket.getData());
+                        
+                        System.out.println(respuesta);
+                        
+                        HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
+                        
+                        InetAddress returnIPAddress = receivePacket.getAddress();
+                        int port = receivePacket.getPort();
+
+                        System.out.println("Respuesta desde =  " + returnIPAddress + ":" + port);
+                       
+                        
+
+                    } catch (SocketTimeoutException ste) {
+
+                        System.out.println("TimeOut: El paquete udp se asume perdido.");
+                    }
+                    
+            }else if(accion ==6L) {
+            		System.out.print("Ingrese el numero de hospital (debe ser numerico): ");
+                    nroHospitalstr = inFromUser.readLine();
+                    nroHospital = 0L;
+                    try {
+                    	nroHospital = Long.parseLong(nroHospitalstr);
+                    }catch(Exception e1) {
+                    	
+                    }
+                    System.out.print("Ingrese el numero de cama (debe ser numerico): ");
+                    nroCamastr = inFromUser.readLine();
+                    nroCama = 0L;
+                    try {
+                    	nroCama = Long.parseLong(nroCamastr);
+                    }catch(Exception e1) {
+                    	
+                    }
+                    
+                    h = new Hospital(nroHospital, nroCama, 1L);
+                    AccionDato = new Log();
+                    AccionDato.setAcción(accion);
+                    AccionDato.setDatos(HospitalJSON.objetoString(h));
+                    datoPaquete = LogJSON.objetoString(AccionDato); 
+                    sendData = datoPaquete.getBytes();
+
+                    System.out.println("Enviar " + datoPaquete + " al servidor. ("+ sendData.length + " bytes)");
+                    sendPacket =
+                            new DatagramPacket(sendData, sendData.length, IPAddress, puertoServidor);
+
+                    clientSocket.send(sendPacket);
+                    
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    System.out.println("Esperamos si viene la respuesta.");
+
+                    //Vamos a hacer una llamada BLOQUEANTE entonces establecemos un timeout maximo de espera
+                    clientSocket.setSoTimeout(10000);
+
+                    try {
+                        // ESPERAMOS LA RESPUESTA, BLOQUENTE
+                        clientSocket.receive(receivePacket);
+
+                        String respuesta = new String(receivePacket.getData());
+                        HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
+                        
+                        InetAddress returnIPAddress = receivePacket.getAddress();
+                        int port = receivePacket.getPort();
+
+                        System.out.println("Respuesta desde =  " + returnIPAddress + ":" + port);
+                       
+                        
+
+                    } catch (SocketTimeoutException ste) {
+
+                        System.out.println("TimeOut: El paquete udp se asume perdido.");
+                    }
+                    
+            }else if(accion ==7L) {
+            		System.out.print("Ingrese el numero de hospital (debe ser numerico): ");
+                    nroHospitalstr = inFromUser.readLine();
+                    nroHospital = 0L;
+                    try {
+                    	nroHospital = Long.parseLong(nroHospitalstr);
+                    }catch(Exception e1) {
+                    	
+                    }
+                    System.out.print("Ingrese el numero de cama (debe ser numerico): ");
+                    nroCamastr = inFromUser.readLine();
+                    nroCama = 0L;
+                    try {
+                    	nroCama = Long.parseLong(nroCamastr);
+                    }catch(Exception e1) {
+                    	
+                    }
+                    
+                    h = new Hospital(nroHospital, nroCama, 2L);
+                    AccionDato = new Log();
+                    AccionDato.setAcción(accion);
+                    AccionDato.setDatos(HospitalJSON.objetoString(h));
+                    datoPaquete = LogJSON.objetoString(AccionDato); 
+                    sendData = datoPaquete.getBytes();
+
+                    System.out.println("Enviar " + datoPaquete + " al servidor. ("+ sendData.length + " bytes)");
+                    sendPacket =
+                            new DatagramPacket(sendData, sendData.length, IPAddress, puertoServidor);
+
+                    clientSocket.send(sendPacket);
+                    
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    System.out.println("Esperamos si viene la respuesta.");
+
+                    //Vamos a hacer una llamada BLOQUEANTE entonces establecemos un timeout maximo de espera
+                    clientSocket.setSoTimeout(10000);
+
+                    try {
+                        // ESPERAMOS LA RESPUESTA, BLOQUENTE
+                        clientSocket.receive(receivePacket);
+
+                        String respuesta = new String(receivePacket.getData());
+                        System.out.println(respuesta);
+                        HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
+                        
+                        InetAddress returnIPAddress = receivePacket.getAddress();
+                        int port = receivePacket.getPort();
+
+                        System.out.println("Respuesta desde =  " + returnIPAddress + ":" + port);
+                       
+                        
+
+                    } catch (SocketTimeoutException ste) {
+
+                        System.out.println("TimeOut: El paquete udp se asume perdido.");
+                    }
+                    
+            }else if(accion ==8L) {
+                    
+                    AccionDato = new Log();
+                    AccionDato.setAcción(accion);
+                    AccionDato.setDatos("Consulta de registros");
+                    datoPaquete = LogJSON.objetoString(AccionDato); 
+                    sendData = datoPaquete.getBytes();
+
+                    System.out.println("Enviar " + datoPaquete + " al servidor. ("+ sendData.length + " bytes)");
+                    sendPacket =
+                            new DatagramPacket(sendData, sendData.length, IPAddress, puertoServidor);
+
+                    clientSocket.send(sendPacket);
+                    
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    System.out.println("Esperamos si viene la respuesta.");
+
+                    //Vamos a hacer una llamada BLOQUEANTE entonces establecemos un timeout maximo de espera
+                    clientSocket.setSoTimeout(10000);
+
+                    try {
+                        // ESPERAMOS LA RESPUESTA, BLOQUENTE
+                        clientSocket.receive(receivePacket);
+
+                        String respuesta = new String(receivePacket.getData());
+                        HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
+                        
+                        InetAddress returnIPAddress = receivePacket.getAddress();
+                        int port = receivePacket.getPort();
+
+                        System.out.println("Respuesta desde =  " + returnIPAddress + ":" + port);
+                       
+                        
+
+                    } catch (SocketTimeoutException ste) {
+
+                        System.out.println("TimeOut: El paquete udp se asume perdido.");
+                    }
+                    
             }
+            
             clientSocket.close();
         } catch (UnknownHostException ex) {
             System.err.println(ex);

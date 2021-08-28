@@ -137,53 +137,75 @@ public class HospitalCentralDAO {
 		
 		List<HospitalCentral> lista = new ArrayList<HospitalCentral>();
 		List<String> listaTotal = new ArrayList<String>();
-		
+		HospitalCentral p;
 		Connection conn = null; 
         try 
         {
         	conn = Bd.connect();
         	ResultSet rs = conn.createStatement().executeQuery(SQL);
         	while(rs.next()) {
-        		HospitalCentral p = new HospitalCentral();
+        		p = new HospitalCentral();
         		p.setNroHospital(rs.getLong(1));
         		p.setNombreHospital(rs.getString(2));
         		
         		lista.add(p);
         	}
         	
-        	
+        	Long nroHospital;
         	for(int i = 0 ; i<lista.size(); i++) {
         		
-        		SQL = "SELECT count(*) FROM hospital WHERE nrohospital = ? ";
+        		SQL = "SELECT nrohospital FROM hospital WHERE nrohospital = ? ";
         		PreparedStatement pstmt = conn.prepareStatement(SQL);
         		pstmt.setLong(1, lista.get(i).getNroHospital());
         		ResultSet rstotal = pstmt.executeQuery();
-        		Long totalcamas = rstotal.getLong(1);
-        		String result = "Hospital número " + lista.get(i) + "Total camas= " + totalcamas;
+        		int totalcamas =0;
+        		while(rstotal.next()) {
+        			nroHospital = rstotal.getLong(1);
+        			System.out.println(totalcamas);
+        			totalcamas ++;
+        			System.out.println(totalcamas);
+            	}
+        		String result = "Hospital número " + lista.get(i).getNroHospital() + " Total camas= " + totalcamas;
+        		System.out.println(result);
         		listaTotal.add(result);
         		
-        		SQL = "SELECT count(*) FROM hospital WHERE nrohospital = ? AND estado=1";
+        		SQL = "SELECT nrohospital FROM hospital WHERE nrohospital = ? AND estado=?";
         		pstmt = conn.prepareStatement(SQL);
         		pstmt.setLong(1, lista.get(i).getNroHospital());
+        		pstmt.setLong(2, 1);
         		rstotal = pstmt.executeQuery();
-        		Long totalCamasDisponibles = rstotal.getLong(1);
-        		result = "Hospital número " + lista.get(i) + "Total camas disponibles= " + totalCamasDisponibles;
+        		int totalCamasDisponibles =0;
+        		while(rstotal.next()) {
+        			nroHospital = rstotal.getLong(1);
+        			totalCamasDisponibles ++;
+            	}
+        		result = "Hospital número " + lista.get(i).getNroHospital() + " Total camas disponibles= " + totalCamasDisponibles;
         		listaTotal.add(result);
         		
-        		SQL = "SELECT count(*) FROM hospital WHERE nrohospital = ? estado=2 ";
+        		SQL = "SELECT nrohospital FROM hospital WHERE nrohospital = ? AND estado=? ";
         		pstmt = conn.prepareStatement(SQL);
         		pstmt.setLong(1, lista.get(i).getNroHospital());
+        		pstmt.setLong(2, 2);
         		rstotal = pstmt.executeQuery();
-        		Long totalOcupadas = rstotal.getLong(1);
-        		result = "Hospital número " + lista.get(i) + "Total cama ocupadass= " + totalOcupadas;
+        		Long totalOcupadas = 0L;
+        		while(rstotal.next()) {
+        			nroHospital = rstotal.getLong(1);
+        			totalOcupadas ++;
+            	}
+        		result = "Hospital número " + lista.get(i).getNroHospital() + " Total cama ocupadas= " + totalOcupadas;
         		listaTotal.add(result);
         		
-        		SQL = "SELECT count(*) FROM hospital WHERE nrohospital = ? estado=3 ";
+        		SQL = "SELECT nrohospital FROM hospital WHERE nrohospital = ? AND estado=? ";
         		pstmt = conn.prepareStatement(SQL);
         		pstmt.setLong(1, lista.get(i).getNroHospital());
+        		pstmt.setLong(2, 3);
         		rstotal = pstmt.executeQuery();
-        		Long totalAveriadas = rstotal.getLong(1);
-        		result = "Hospital número " + lista.get(i) + "Total cama averiadass= " + totalAveriadas;
+        		Long totalAveriadas = 0L;
+        		while(rstotal.next()) {
+        			nroHospital = rstotal.getLong(1);
+        			totalAveriadas ++;
+            	}
+        		result = "Hospital número " + lista.get(i).getNroHospital() + " Total cama averiadass= " + totalAveriadas;
         		listaTotal.add(result);
         		
         		

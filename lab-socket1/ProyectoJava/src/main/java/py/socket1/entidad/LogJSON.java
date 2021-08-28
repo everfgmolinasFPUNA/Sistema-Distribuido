@@ -11,7 +11,7 @@ public class LogJSON {
 	public static String objetoString(Log p) {	
     	
 		JSONObject obj = new JSONObject();
-        obj.put("Acción", p.getAcción());
+        obj.put("Accion", p.getAcción());
         obj.put("nombreAcción", p.getNombreAcción());
         obj.put("IP", p.getIPAddress());
         obj.put("Puerto", p.getPort());
@@ -27,7 +27,7 @@ public class LogJSON {
         Object obj = parser.parse(str.trim());
         JSONObject jsonObject = (JSONObject) obj;
 
-        int accion = (int) jsonObject.get("Acción");
+        Long accion = (Long) jsonObject.get("Accion");
         p.setAcción(accion);
         p.setDatos((String)jsonObject.get("Datos"));
         
