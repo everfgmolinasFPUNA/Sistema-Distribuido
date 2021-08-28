@@ -35,6 +35,12 @@ public class HospitalCentralJSON {
         p.setNroHospital(nroHospital);
         p.setNombreHospital((String)jsonObject.get("nombre"));
         
+        JSONArray msg = (JSONArray) jsonObject.get("resumen");
+        Iterator<String> iterator = msg.iterator();
+        while (iterator.hasNext()) {
+        	p.resumen.add(iterator.next());
+        }
+        
         return p;
 	}
 

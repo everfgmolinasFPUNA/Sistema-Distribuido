@@ -128,6 +128,80 @@ public class HospitalCentralDAO {
     	
     	
     }
+    
+    public List<String> estadoHospitales() {
+		
+		//Listar Hospitales
+		
+		String SQL = "SELECT nrohospital, nombre FROM hospitalcentral";
+		
+		List<HospitalCentral> lista = new ArrayList<HospitalCentral>();
+		List<String> listaTotal = new ArrayList<String>();
+		
+		Connection conn = null; 
+        try 
+        {
+        	conn = Bd.connect();
+        	ResultSet rs = conn.createStatement().executeQuery(SQL);
+        	while(rs.next()) {
+        		HospitalCentral p = new HospitalCentral();
+        		p.setNroHospital(rs.getLong(1));
+        		p.setNombreHospital(rs.getString(2));
+        		
+        		lista.add(p);
+        	}
+        	
+        	
+        	for(int i = 0 ; i<lista.size(); i++) {
+        		
+        		SQL = "SELECT count(*) FROM hospital WHERE nrohospital = ? ";
+        		PreparedStatement pstmt = conn.prepareStatement(SQL);
+        		pstmt.setLong(1, lista.get(i).getNroHospital());
+        		ResultSet rstotal = pstmt.executeQuery();
+        		Long totalcamas = rstotal.getLong(1);
+        		String result = "Hospital número " + lista.get(i) + "Total camas= " + totalcamas;
+        		listaTotal.add(result);
+        		
+        		SQL = "SELECT count(*) FROM hospital WHERE nrohospital = ? AND estado=1";
+        		pstmt = conn.prepareStatement(SQL);
+        		pstmt.setLong(1, lista.get(i).getNroHospital());
+        		rstotal = pstmt.executeQuery();
+        		Long totalCamasDisponibles = rstotal.getLong(1);
+        		result = "Hospital número " + lista.get(i) + "Total camas disponibles= " + totalCamasDisponibles;
+        		listaTotal.add(result);
+        		
+        		SQL = "SELECT count(*) FROM hospital WHERE nrohospital = ? estado=2 ";
+        		pstmt = conn.prepareStatement(SQL);
+        		pstmt.setLong(1, lista.get(i).getNroHospital());
+        		rstotal = pstmt.executeQuery();
+        		Long totalOcupadas = rstotal.getLong(1);
+        		result = "Hospital número " + lista.get(i) + "Total cama ocupadass= " + totalOcupadas;
+        		listaTotal.add(result);
+        		
+        		SQL = "SELECT count(*) FROM hospital WHERE nrohospital = ? estado=3 ";
+        		pstmt = conn.prepareStatement(SQL);
+        		pstmt.setLong(1, lista.get(i).getNroHospital());
+        		rstotal = pstmt.executeQuery();
+        		Long totalAveriadas = rstotal.getLong(1);
+        		result = "Hospital número " + lista.get(i) + "Total cama averiadass= " + totalAveriadas;
+        		listaTotal.add(result);
+        		
+        		
+        	}
+        	
+        } catch (SQLException ex) {
+            System.out.println("Error en la seleccion: " + ex.getMessage());
+        }
+        finally  {
+        	try{
+        		conn.close();
+        	}catch(Exception ef){
+        		System.out.println("No se pudo cerrar la conexion a BD: "+ ef.getMessage());
+        	}
+        }
+		return listaTotal;
+
+	}
 	
 
     public long actualizar(HospitalCentral p) throws SQLException {

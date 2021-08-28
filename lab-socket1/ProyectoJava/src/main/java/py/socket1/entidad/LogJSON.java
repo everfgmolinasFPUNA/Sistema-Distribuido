@@ -1,5 +1,8 @@
 package py.socket1.entidad;
 
+import java.util.List;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -29,6 +32,23 @@ public class LogJSON {
         p.setDatos((String)jsonObject.get("Datos"));
         
         return p;
+	}
+	
+	public static String ListLogs(List<Log> p) throws Exception {
+		
+		JSONObject obj = new JSONObject();
+		JSONArray list = new JSONArray();
+        String temp;
+        for(int i = 0 ; i < p.size() ; i++){
+        	temp = p.get(i).toString();
+        	list.add(temp);
+        }
+       // if(list.size() > 0) {
+        	obj.put("asignaturas", list);
+        //}
+        
+
+        return obj.toJSONString();
 	}
 	
 }

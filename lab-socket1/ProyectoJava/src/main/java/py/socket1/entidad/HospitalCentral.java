@@ -6,6 +6,17 @@ public class HospitalCentral {
 	String nombreHospital;
 	Long nroHospital;
 	
+	List<String> resumen;
+	
+	
+	public List<String> getResumen() {
+		return resumen;
+	}
+
+	public void setResumen(List<String> resumen) {
+		this.resumen = resumen;
+	}
+
 	public HospitalCentral(){
 		this.nombreHospital = "";
 		this.nroHospital = 0L;

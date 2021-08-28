@@ -6,14 +6,14 @@ import java.util.List;
 public class Hospital {
 
 	Long nroCama;
-	byte estado;
+	Long estado;
 	Long nroHospital;
 	
 	public Hospital() {
 		
 	}
 
-	public Hospital(Long nroHospital, Long nroCama, byte estado){
+	public Hospital(Long nroHospital, Long nroCama, Long estado){
 		this.nroCama = nroCama;
 		this.nroHospital = nroHospital;
 		this.estado = estado;
@@ -31,12 +31,12 @@ public class Hospital {
 	}
 
 
-	public byte getEstado() {
+	public Long getEstado() {
 		return estado;
 	}
 
 
-	public void setEstado(byte estado) {
+	public void setEstado(Long estado) {
 		this.estado = estado;
 	}
 

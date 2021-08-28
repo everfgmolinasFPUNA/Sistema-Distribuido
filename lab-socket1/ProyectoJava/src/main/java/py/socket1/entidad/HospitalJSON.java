@@ -34,7 +34,7 @@ public class HospitalJSON {
 
         Long nroHospital = (Long) jsonObject.get("nroHospital");
         p.setNroHospital(nroHospital);
-        p.setEstado((Byte)jsonObject.get("estado"));
+        p.setEstado((Long)jsonObject.get("estado"));
         p.setNroCama((Long)jsonObject.get("nroCama"));
         
         return p;

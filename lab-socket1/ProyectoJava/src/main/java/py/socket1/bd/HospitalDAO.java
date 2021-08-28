@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import py.socket1.entidad.Hospital;
+import py.socket1.entidad.HospitalCentral;
 public class HospitalDAO {
  
 	/**
@@ -31,7 +32,7 @@ public class HospitalDAO {
         	while(rs.next()) {
         		Hospital p = new Hospital();
         		p.setNroCama(rs.getLong(1));
-        		p.setEstado(rs.getByte(2));
+        		p.setEstado(rs.getLong(2));
         		p.setNroHospital(rs.getLong(3));
         		
         		lista.add(p);
@@ -68,7 +69,7 @@ public class HospitalDAO {
         	while(rs.next()) {
         		Hospital p = new Hospital();
         		p.setNroCama(rs.getLong(1));
-        		p.setEstado(rs.getByte(2));
+        		p.setEstado(rs.getLong(2));
         		p.setNroHospital(rs.getLong(3));
         		
         		lista.add(p);
@@ -88,46 +89,7 @@ public class HospitalDAO {
 
 	}
 	
-	public List<Hospital> estadoHospitales() {
-		
-		//Listar Hospitales
-		
-		String SQL = "SELECT count(nrocama) FROM hospital WHERE nrohospital = ?";
-		
-		List<Hospital> lista = new ArrayList<Hospital>();
-		List<List<Hospital>> listaTotal = new ArrayList<List<Hospital>>();
-		
-		Connection conn = null; 
-        try 
-        {
-        	conn = Bd.connect();
-        	PreparedStatement pstmt = conn.prepareStatement(SQL);
-        	pstmt.setLong(1, cedula);
-        	
-        	ResultSet rs = pstmt.executeQuery();
-
-        	while(rs.next()) {
-        		Hospital p = new Hospital();
-        		p.setNroCama(rs.getLong(1));
-        		p.setEstado(rs.getByte(2));
-        		p.setNroHospital(rs.getLong(3));
-        		
-        		lista.add(p);
-        	}
-        	
-        } catch (SQLException ex) {
-            System.out.println("Error en la seleccion: " + ex.getMessage());
-        }
-        finally  {
-        	try{
-        		conn.close();
-        	}catch(Exception ef){
-        		System.out.println("No se pudo cerrar la conexion a BD: "+ ef.getMessage());
-        	}
-        }
-		return lista;
-
-	}
+	
 	
     public long insertar(Hospital p) throws SQLException {
 
@@ -142,7 +104,7 @@ public class HospitalDAO {
         	conn = Bd.connect();
         	PreparedStatement pstmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             pstmt.setLong(1, p.getNroCama());
-            pstmt.setByte(2, p.getEstado());
+            pstmt.setLong(2, p.getEstado());
             pstmt.setLong(3, p.getNroHospital());
             
             int affectedRows = pstmt.executeUpdate();
@@ -185,7 +147,7 @@ public class HospitalDAO {
         {
         	conn = Bd.connect();
         	PreparedStatement pstmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setByte(1, p.getEstado());
+            pstmt.setLong(1, p.getEstado());
             pstmt.setLong(2, p.getNroCama());
             pstmt.setLong(3, p.getNroHospital());
  
