@@ -1,4 +1,4 @@
-package py.socket1.server.udp;
+package py.socket1.client;
 
 
 import java.io.*;
