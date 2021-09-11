@@ -1,9 +1,9 @@
 package py.socket1.server.udp;
 
-
+//importacion de paquetes de java necesarios
 import java.io.*;
 import java.net.*;
-
+//importacion de entidades necesarias 
 import py.socket1.entidad.Hospital;
 import py.socket1.entidad.HospitalJSON;
 import py.socket1.entidad.HospitalCentral;
@@ -37,7 +37,7 @@ class UDPClient {
             byte[] sendData = new byte[1024];
             byte[] receiveData = new byte[1024];
 
-            System.out.print("Ingrese la acción a realizar (debe ser numÃ©rico): ");
+            System.out.print("Ingrese la acciï¿½n a realizar (debe ser numÃ©rico): ");
             String accionstr = inFromUser.readLine();
             Long accion = 0L;
             try {
@@ -71,7 +71,7 @@ class UDPClient {
                     
                     p = new HospitalCentral(nroHospital, nombre);
                     AccionDato = new Log();
-                    AccionDato.setAcción(accion);
+                    AccionDato.setAcciï¿½n(accion);
                     AccionDato.setPort(puertoServidor);
                     //AccionDato.setIPAddress(IPAddress);
                     AccionDato.setDatos(HospitalCentralJSON.objetoString(p));
@@ -124,7 +124,7 @@ class UDPClient {
                     
                     p = new HospitalCentral(nroHospital, nombre);
                     AccionDato = new Log();
-                    AccionDato.setAcción(accion);
+                    AccionDato.setAcciï¿½n(accion);
                     AccionDato.setDatos(HospitalCentralJSON.objetoString(p));
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -180,7 +180,7 @@ class UDPClient {
                     
                     h = new Hospital(nroHospital, nroCama, 3L);
                     AccionDato = new Log();
-                    AccionDato.setAcción(accion);
+                    AccionDato.setAcciï¿½n(accion);
                     AccionDato.setDatos(HospitalJSON.objetoString(h));
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -236,7 +236,7 @@ class UDPClient {
                     
                     h = new Hospital(nroHospital, nroCama, 1L);
                     AccionDato = new Log();
-                    AccionDato.setAcción(accion);
+                    AccionDato.setAcciï¿½n(accion);
                     AccionDato.setDatos(HospitalJSON.objetoString(h));
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -274,7 +274,7 @@ class UDPClient {
                     
             }else if(accion ==5L) {
                     AccionDato = new Log();
-                    AccionDato.setAcción(5L);
+                    AccionDato.setAcciï¿½n(5L);
                     AccionDato.setDatos("Consulta de estados");
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -333,7 +333,7 @@ class UDPClient {
                     
                     h = new Hospital(nroHospital, nroCama, 1L);
                     AccionDato = new Log();
-                    AccionDato.setAcción(accion);
+                    AccionDato.setAcciï¿½n(accion);
                     AccionDato.setDatos(HospitalJSON.objetoString(h));
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -389,7 +389,7 @@ class UDPClient {
                     
                     h = new Hospital(nroHospital, nroCama, 2L);
                     AccionDato = new Log();
-                    AccionDato.setAcción(accion);
+                    AccionDato.setAcciï¿½n(accion);
                     AccionDato.setDatos(HospitalJSON.objetoString(h));
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -429,7 +429,7 @@ class UDPClient {
             }else if(accion ==8L) {
                     
                     AccionDato = new Log();
-                    AccionDato.setAcción(accion);
+                    AccionDato.setAcciï¿½n(accion);
                     AccionDato.setDatos("Consulta de registros");
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
