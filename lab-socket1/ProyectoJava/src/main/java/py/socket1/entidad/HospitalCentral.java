@@ -20,6 +20,7 @@ public class HospitalCentral {
 	public HospitalCentral(){
 		this.nombreHospital = "";
 		this.nroHospital = 0L;
+		resumen = new ArrayList<String>();
 		
 	}
 	

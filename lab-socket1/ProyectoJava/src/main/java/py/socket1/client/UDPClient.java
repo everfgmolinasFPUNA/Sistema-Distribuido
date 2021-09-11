@@ -1,4 +1,4 @@
-package py.socket1.server.udp;
+package py.socket1.client;
 
 //importacion de paquetes de java necesarios
 import java.io.*;
@@ -96,6 +96,7 @@ class UDPClient {
                         clientSocket.receive(receivePacket);
 
                         String respuesta = new String(receivePacket.getData());
+                        System.out.println(respuesta);
                         HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
                         
                         InetAddress returnIPAddress = receivePacket.getAddress();
@@ -297,10 +298,8 @@ class UDPClient {
 
                         String respuesta = new String(receivePacket.getData());
                         
-                        System.out.println(respuesta);
-                        
-                        HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
-                        
+                        HospitalCentral presp = HospitalCentralJSON.objetoStringList(respuesta.trim());
+                        System.out.println(presp.getResumen());
                         InetAddress returnIPAddress = receivePacket.getAddress();
                         int port = receivePacket.getPort();
 
@@ -452,6 +451,7 @@ class UDPClient {
 
                         String respuesta = new String(receivePacket.getData());
                         HospitalCentral presp = HospitalCentralJSON.stringObjeto(respuesta.trim());
+                        System.out.println(presp.getResumen());
                         
                         InetAddress returnIPAddress = receivePacket.getAddress();
                         int port = receivePacket.getPort();
