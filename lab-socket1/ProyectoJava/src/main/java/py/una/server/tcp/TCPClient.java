@@ -14,16 +14,16 @@ public class TCPClient {
 
         try {
             unSocket = new Socket("localhost", 4444);
-            // enviamos nosotros
+            // envia el cliente
             out = new PrintWriter(unSocket.getOutputStream(), true);
 
             //viene del servidor
             in = new BufferedReader(new InputStreamReader(unSocket.getInputStream()));
-        } catch (UnknownHostException e) {
-            System.err.println("Host desconocido");
+        } catch (UnknownHostException e) {	//Excepcion por si no se encuentra el servidor
+            System.err.println("Host NO ENCONTRADO");
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("Error de I/O en la conexion al host");
+            System.err.println("Error de Entrada/salida en la conexion al host");
             System.exit(1);
         }
 
@@ -33,14 +33,14 @@ public class TCPClient {
         String fromUser;
 
         while ((fromServer = in.readLine()) != null) {
-            System.out.println("Servidor: " + fromServer);
+            System.out.println("El Servidor es: " + fromServer);
             if (fromServer.equals("Bye")) {
                 break;
             }
 
             fromUser = stdIn.readLine();
             if (fromUser != null) {
-                System.out.println("Cliente: " + fromUser);
+                System.out.println("El Cliente es: " + fromUser);
 
                 //escribimos al servidor
                 out.println(fromUser);
