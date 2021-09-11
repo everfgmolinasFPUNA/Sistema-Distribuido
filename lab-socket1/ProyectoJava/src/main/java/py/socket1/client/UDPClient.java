@@ -37,7 +37,7 @@ class UDPClient {
             byte[] sendData = new byte[1024];
             byte[] receiveData = new byte[1024];
 
-            System.out.print("Ingrese la acci�n a realizar (debe ser numérico): ");
+            System.out.print("Ingrese la accion a realizar (debe ser numerico): ");
             String accionstr = inFromUser.readLine();
             Long accion = 0L;
             try {
