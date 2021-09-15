@@ -71,7 +71,7 @@ class UDPClient {
                     
                     p = new HospitalCentral(nroHospital, nombre);
                     AccionDato = new Log();
-                    AccionDato.setAcci�n(accion);
+                    AccionDato.setAccion(accion);
                     AccionDato.setPort(puertoServidor);
                     //AccionDato.setIPAddress(IPAddress);
                     AccionDato.setDatos(HospitalCentralJSON.objetoString(p));
@@ -125,7 +125,7 @@ class UDPClient {
                     
                     p = new HospitalCentral(nroHospital, nombre);
                     AccionDato = new Log();
-                    AccionDato.setAcci�n(accion);
+                    AccionDato.setAccion(accion);
                     AccionDato.setDatos(HospitalCentralJSON.objetoString(p));
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -181,7 +181,7 @@ class UDPClient {
                     
                     h = new Hospital(nroHospital, nroCama, 3L);
                     AccionDato = new Log();
-                    AccionDato.setAcci�n(accion);
+                    AccionDato.setAccion(accion);
                     AccionDato.setDatos(HospitalJSON.objetoString(h));
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -237,7 +237,7 @@ class UDPClient {
                     
                     h = new Hospital(nroHospital, nroCama, 1L);
                     AccionDato = new Log();
-                    AccionDato.setAcci�n(accion);
+                    AccionDato.setAccion(accion);
                     AccionDato.setDatos(HospitalJSON.objetoString(h));
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -275,7 +275,7 @@ class UDPClient {
                     
             }else if(accion ==5L) {
                     AccionDato = new Log();
-                    AccionDato.setAcci�n(5L);
+                    AccionDato.setAccion(5L);
                     AccionDato.setDatos("Consulta de estados");
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -332,7 +332,7 @@ class UDPClient {
                     
                     h = new Hospital(nroHospital, nroCama, 1L);
                     AccionDato = new Log();
-                    AccionDato.setAcci�n(accion);
+                    AccionDato.setAccion(accion);
                     AccionDato.setDatos(HospitalJSON.objetoString(h));
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -388,7 +388,7 @@ class UDPClient {
                     
                     h = new Hospital(nroHospital, nroCama, 2L);
                     AccionDato = new Log();
-                    AccionDato.setAcci�n(accion);
+                    AccionDato.setAccion(accion);
                     AccionDato.setDatos(HospitalJSON.objetoString(h));
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
@@ -428,7 +428,7 @@ class UDPClient {
             }else if(accion ==8L) {
                     
                     AccionDato = new Log();
-                    AccionDato.setAcci�n(accion);
+                    AccionDato.setAccion(accion);
                     AccionDato.setDatos("Consulta de registros");
                     datoPaquete = LogJSON.objetoString(AccionDato); 
                     sendData = datoPaquete.getBytes();
